@@ -4,11 +4,10 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-
     static int N, K;
-    static boolean[] visit;
     static int max = 100000;
-    static int min = Integer.MAX_VALUE;
+    static boolean[] visit;
+    static int time = Integer.MAX_VALUE;
 
     public static class Node {
         int x;
@@ -23,8 +22,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
@@ -32,34 +31,38 @@ public class Main {
 
         bfs();
 
-        System.out.println(min);
+        System.out.println(time);
     }
 
     public static void bfs() {
         Queue<Node> q = new LinkedList<>();
-        q.offer(new Node(N, 0));
+        q.add(new Node(N, 0));
+        visit[N] = true;
 
         while (!q.isEmpty()) {
             Node node = q.poll();
             visit[node.x] = true;
+
             if (node.x == K) {
-                min = Math.min(node.time, min);
+                time = Math.min(node.time, time);
             }
 
             if (node.x * 2 <= max && !visit[node.x * 2]) {
-                q.offer(new Node(node.x * 2, node.time));
-            }
-            if (node.x + 1 <= max && !visit[node.x + 1]) {
-                q.offer(new Node(node.x +1, node.time + 1));
-            }
-            if (node.x - 1 >= 0 && !visit[node.x - 1]) {
-                q.offer(new Node(node.x - 1, node.time + 1));
+                q.add(new Node(node.x * 2, node.time));
             }
 
+            if (node.x + 1 <= max && !visit[node.x + 1]) {
+                q.add(new Node(node.x + 1, node.time + 1));
+            }
+
+            if (node.x - 1 >= 0 && !visit[node.x - 1]) {
+                q.add(new Node(node.x - 1, node.time + 1));
+            }
         }
 
 
-
     }
+
+
 
 }
