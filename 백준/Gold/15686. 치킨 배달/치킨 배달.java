@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Main {
     static int N, M;
-    static int[][] city;
     static ArrayList<Node> home;
     static ArrayList<Node> chicken;
     static boolean[] live;
@@ -25,19 +24,18 @@ public class Main {
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        city = new int[N][N];
         home = new ArrayList<>();
         chicken = new ArrayList<>();
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                city[i][j] = Integer.parseInt(st.nextToken());
+                int value = Integer.parseInt(st.nextToken());
 
-                if (city[i][j] == 1) {
+                if (value == 1) {
                     home.add(new Node(i, j));
                 }
-                if (city[i][j] == 2) {
+                if (value == 2) {
                     chicken.add(new Node(i, j));
                 }
             }
@@ -62,6 +60,7 @@ public class Main {
                     }
                 }
                 temp_result += temp;
+                // 여기서 if 문으로 최솟값 비교해서 값이 더 작다면 바로 백트래킹 하면 좋음
             }
             result = Math.min(result, temp_result);
             return;
