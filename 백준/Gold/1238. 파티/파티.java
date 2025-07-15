@@ -4,13 +4,13 @@ import java.util.*;
 public class Main {
     static int N, M, X;
     static ArrayList<Node>[] graph;
-    static ArrayList<Node>[] reversGraph;
-    static int INF = 1000000;
+    static ArrayList<Node>[] reverseGraph;
+    static int[] dist;
 
     static class Node implements Comparable<Node> {
         int index, weight;
 
-        public Node(int index, int weight){
+        public Node(int index, int weight) {
             this.index = index;
             this.weight = weight;
         }
@@ -20,7 +20,7 @@ public class Main {
             return this.weight - node.weight;
         }
     }
-    
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
@@ -31,10 +31,10 @@ public class Main {
         X = Integer.parseInt(st.nextToken());
 
         graph = new ArrayList[N + 1];
-        reversGraph = new ArrayList[N + 1];
+        reverseGraph = new ArrayList[N + 1];
         for (int i = 1; i <= N; i++) {
             graph[i] = new ArrayList<>();
-            reversGraph[i] = new ArrayList<>();
+            reverseGraph[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < M; i++) {
@@ -44,29 +44,24 @@ public class Main {
             int weight = Integer.parseInt(st.nextToken());
 
             graph[from].add(new Node(to, weight));
-            reversGraph[to].add(new Node(from, weight));
+            reverseGraph[to].add(new Node(from, weight));
         }
 
-        // X에서 각 마을로
-        int[] go = algorithm(graph, X);
-        // 각 마을에서 X로
-        int[] back = algorithm(reversGraph, X);
-
         int result = 0;
+        int[] go = algorithm(reverseGraph, X);
+        int[] back = algorithm(graph, X);
+
         for (int i = 1; i <= N; i++) {
             int tmp = go[i] + back[i];
 
-            if (tmp > result) {
-                result = tmp;
-            }
+            result = Math.max(result, tmp);
         }
-
         System.out.println(result);
     }
 
-    static int[] algorithm(ArrayList<Node>[] list ,int start) {
-        int[] dist = new int[N + 1];
-        Arrays.fill(dist, INF);
+    static int[] algorithm(ArrayList<Node>[] list, int start) {
+        dist = new int[N + 1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
         dist[start] = 0;
 
         PriorityQueue<Node> pq = new PriorityQueue<>();
@@ -84,6 +79,7 @@ public class Main {
                     pq.add(new Node(node.index, dist[node.index]));
                 }
             }
+
         }
         return dist;
     }
