@@ -15,11 +15,9 @@ class Solution {
         }
     }
     
-    static ArrayList<Point>[] map;
-    
     public int solution(int n, int[][] costs) {
         
-        map = new ArrayList[n];
+        ArrayList<Point>[] map = new ArrayList[n];
         for (int i = 0; i < n; i++) {
             map[i] = new ArrayList<>();
         }
@@ -39,7 +37,7 @@ class Solution {
         PriorityQueue<Point> pq = new PriorityQueue<>();
         pq.add(new Point(0, 0));
         
-        while (!pq.isEmpty()) {
+        while(!pq.isEmpty()) {
             Point cur = pq.poll();
             
             if (visited[cur.node])
@@ -48,7 +46,6 @@ class Solution {
             answer += cur.weight;
             
             for (int i = 0; i < map[cur.node].size(); i++) {
-                
                 int next = map[cur.node].get(i).node;
                 int weight = map[cur.node].get(i).weight;
                 
@@ -58,5 +55,5 @@ class Solution {
             }
         }
         return answer;
-    }
+    }       
 }
