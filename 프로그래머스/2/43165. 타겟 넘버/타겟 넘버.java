@@ -1,27 +1,28 @@
 class Solution {
     
-    static int count = 0;
+    static int cnt = 0;
     
     public int solution(int[] numbers, int target) {
+        
         dfs(0, numbers, target, 0);
         
-        return count;
+        return(cnt);
     }
     
-    private void dfs(int depth, int[] numbers, int target, int result) {
+    private void dfs(int idx, int[] nums, int target, int sum) {
         
-        if (depth == numbers.length) {
-            if (result == target) {
-                count++;
+        if (idx == nums.length) {
+            if (sum == target) {
+                cnt++;
             }
             return;
         }
         
-        int plus = result + numbers[depth];
-        int minus = result - numbers[depth];
+        int plus = sum + nums[idx];
+        int minus = sum - nums[idx];
         
-        dfs(depth+1, numbers, target, plus);
-        dfs(depth+1, numbers, target, minus);
+        dfs(idx + 1, nums, target, plus);
+        dfs(idx + 1, nums, target, minus);        
     }
     
 }
