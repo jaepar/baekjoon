@@ -1,59 +1,44 @@
 import java.util.*;
 
 class Solution {
-    
-    public class Point implements Comparable<Point> {
-        int node, weight;
-        
-        public Point(int node, int weight) {
-            this.node = node;
-            this.weight = weight;
-        }
-        
-        public int compareTo(Point o) {
-            return this.weight - o.weight;
-        }
-    }
+    static int[] parent;
     
     public int solution(int n, int[][] costs) {
+        int answer = 0;
+        parent = new int[n];
         
-        ArrayList<Point>[] map = new ArrayList[n];
         for (int i = 0; i < n; i++) {
-            map[i] = new ArrayList<>();
+            parent[i] = i;
         }
+        
+        Arrays.sort(costs, (o1, o2) -> o1[2] - o2[2]);
         
         for (int i = 0; i < costs.length; i++) {
-            int from = costs[i][0];
-            int to = costs[i][1];
-            int weight = costs[i][2];
-            
-            map[from].add(new Point(to, weight));
-            map[to].add(new Point(from, weight));
-        }
-        
-        int answer = 0;
-        
-        boolean[] visited = new boolean[n];
-        PriorityQueue<Point> pq = new PriorityQueue<>();
-        pq.add(new Point(0, 0));
-        
-        while(!pq.isEmpty()) {
-            Point cur = pq.poll();
-            
-            if (visited[cur.node])
-                continue;
-            visited[cur.node] = true;
-            answer += cur.weight;
-            
-            for (int i = 0; i < map[cur.node].size(); i++) {
-                int next = map[cur.node].get(i).node;
-                int weight = map[cur.node].get(i).weight;
-                
-                if (visited[next])
-                    continue;
-                pq.add(new Point(next, weight));
+            if (find(costs[i][0]) != find(costs[i][1])) {
+                union(costs[i][0], costs[i][1]);
+                answer += costs[i][2];
             }
         }
         return answer;
-    }       
+    }
+    
+    private int find(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        
+        return find(parent[node]);
+    }
+    
+    private void union(int x, int y) {
+        int a = find(x);
+        int b = find(y);
+        
+        if (a < b) {
+            parent[b] = a;
+        } else {
+            parent[a] = b;
+        }
+    }
+    
 }
